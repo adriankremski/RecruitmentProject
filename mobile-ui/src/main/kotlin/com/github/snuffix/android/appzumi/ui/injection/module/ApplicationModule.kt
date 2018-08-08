@@ -1,12 +1,17 @@
 package com.github.snuffix.android.appzumi.ui.injection.module
 
 import android.app.Application
+import android.arch.persistence.room.Room
 import android.content.Context
 import com.github.snuffix.android.appzumi.ReposDataRepositoryImpl
-import com.github.snuffix.android.appzumi.data.repository.RepositoryRemote
+import com.github.snuffix.android.appzumi.cache.RepositoryCacheSourceImpl
+import com.github.snuffix.android.appzumi.cache.database.RepositoryDatabase
+import com.github.snuffix.android.appzumi.cache.mapper.CachedRepositoryMapper
+import com.github.snuffix.android.appzumi.data.repository.RepositoryRemoteSource
 import com.github.snuffix.android.appzumi.domain.executor.PostExecutionThread
 import com.github.snuffix.android.appzumi.domain.repository.ReposDataRepository
 import com.github.snuffix.android.appzumi.data.mapper.RepositoryMapper
+import com.github.snuffix.android.appzumi.data.repository.RepositoryCacheSource
 import com.github.snuffix.android.appzumi.remote.*
 import com.github.snuffix.android.appzumi.remote.mapper.BitbucketRepositoryEntityMapper
 import com.github.snuffix.android.appzumi.remote.mapper.GithubRepositoryEntityMapper
@@ -42,8 +47,8 @@ open class ApplicationModule {
     fun repositoryRemote(githubApiService: GithubApiService,
                          githubRepositoryEntityMapper: GithubRepositoryEntityMapper,
                          bitbucketApiService: BitbucketApiService,
-                         bitbucketRepositoryEntityMapper: BitbucketRepositoryEntityMapper): RepositoryRemote {
-        return RepositoryRemoteImpl(
+                         bitbucketRepositoryEntityMapper: BitbucketRepositoryEntityMapper): RepositoryRemoteSource {
+        return RepositoryRemoteSourceImpl(
                 githubApiService = githubApiService,
                 githubRepositoryEntityMapper = githubRepositoryEntityMapper,
                 bitbucketApiService = bitbucketApiService,
@@ -52,8 +57,26 @@ open class ApplicationModule {
 
     @Provides
     @PerApplication
-    fun reposDataRepository(repositoryRemote: RepositoryRemote, repositoryMapper: RepositoryMapper): ReposDataRepository {
-        return ReposDataRepositoryImpl(repositoryRemote, repositoryMapper)
+    internal fun repositoryDatabase(application: Application): RepositoryDatabase {
+        return Room.databaseBuilder(application.applicationContext,
+                RepositoryDatabase::class.java, "repositories.db")
+                .build()
+    }
+
+    @Provides
+    @PerApplication
+    internal fun repositoryCacheSource(database: RepositoryDatabase,
+                                       mapper: CachedRepositoryMapper): RepositoryCacheSource {
+        return RepositoryCacheSourceImpl(database, mapper)
+    }
+
+    @Provides
+    @PerApplication
+    fun reposDataRepository(
+            repositoryCacheSource: RepositoryCacheSource,
+            repositoryRemoteSource: RepositoryRemoteSource,
+            repositoryMapper: RepositoryMapper): ReposDataRepository {
+        return ReposDataRepositoryImpl(repositoryCacheSource, repositoryRemoteSource, repositoryMapper)
     }
 
     @Provides

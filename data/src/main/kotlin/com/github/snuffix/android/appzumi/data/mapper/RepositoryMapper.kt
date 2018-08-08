@@ -7,6 +7,7 @@ import javax.inject.Inject
 open class RepositoryMapper @Inject constructor() : Mapper<RepositoryEntity, RepositoryDomainModel> {
     override fun mapFromEntity(model: RepositoryEntity): RepositoryDomainModel {
         return RepositoryDomainModel(
+                id = model.id,
                 repositoryName = model.repositoryName,
                 userName = model.userName,
                 description = model.description,
@@ -15,6 +16,7 @@ open class RepositoryMapper @Inject constructor() : Mapper<RepositoryEntity, Rep
     }
 
     override fun mapToEntity(repository: RepositoryDomainModel): RepositoryEntity = RepositoryEntity(
+            id = repository.id,
             repositoryName = repository.repositoryName,
             userName = repository.userName,
             description = repository.description,

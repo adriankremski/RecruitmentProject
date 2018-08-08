@@ -6,6 +6,7 @@ import javax.inject.Inject
 
 open class RepositoryMapper @Inject constructor() : Mapper<Repository, RepositoryDomainModel> {
     override fun mapFromModel(model: Repository): RepositoryDomainModel = RepositoryDomainModel(
+            id = model.id,
             repositoryName = model.repositoryName,
             userName = model.userName,
             description = model.description,
@@ -13,6 +14,7 @@ open class RepositoryMapper @Inject constructor() : Mapper<Repository, Repositor
             avatarUrl = model.avatarUrl)
 
     override fun mapToModel(repository: RepositoryDomainModel): Repository = Repository(
+            id = repository.id,
             repositoryName = repository.repositoryName,
             userName = repository.userName,
             description = repository.description,
