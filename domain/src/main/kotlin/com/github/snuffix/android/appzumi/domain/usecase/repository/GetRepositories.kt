@@ -9,9 +9,9 @@ import javax.inject.Inject
 
 open class GetRepositories @Inject constructor(private val reposDataRepository: ReposDataRepository,
                                                postExecutionThread: PostExecutionThread) :
-        FlowableUseCase<List<RepositoryDomainModel>, Void?>(postExecutionThread) {
+        FlowableUseCase<List<RepositoryDomainModel>, Boolean?>(postExecutionThread) {
 
-    public override fun buildUseCaseObservable(params: Void?): Flowable<List<RepositoryDomainModel>> {
-        return reposDataRepository.getRepositories()
+    public override fun buildUseCaseObservable(forceRefresh: Boolean?): Flowable<List<RepositoryDomainModel>> {
+        return reposDataRepository.getRepositories(forceRefresh!!)
     }
 }

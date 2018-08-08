@@ -11,4 +11,6 @@ interface RepositoryCacheSource {
     fun clearRepositories(): Completable
     fun getRepository(repositoryId: String): Flowable<RepositoryEntity>
     fun isCached(): Single<Boolean>
+    fun isExpired(): Boolean
+    fun setLastCacheTime(lastCache: Long)
 }

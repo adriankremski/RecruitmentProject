@@ -8,9 +8,8 @@ dependencies {
 
     compile project(':domain')
 
-    compile dataDependencies.javaxAnnotation
-
     implementation dataDependencies.kotlin
     implementation dataDependencies.javaxInject
+    implementation dataDependencies.javaxAnnotation
     implementation dataDependencies.rxKotlin
 }

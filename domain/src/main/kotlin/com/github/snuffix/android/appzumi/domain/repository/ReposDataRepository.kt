@@ -4,5 +4,5 @@ import com.github.snuffix.android.appzumi.domain.model.RepositoryDomainModel
 import io.reactivex.Flowable
 
 interface ReposDataRepository {
-    fun getRepositories(): Flowable<List<RepositoryDomainModel>>
+    fun getRepositories(forceRefresh: Boolean): Flowable<List<RepositoryDomainModel>>
 }

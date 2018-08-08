@@ -25,9 +25,9 @@ open class GetRepositoriesViewModel @Inject internal constructor(
 
     fun repositories(): LiveData<Resource<List<Repository>>> = liveData
 
-    fun fetchRepositories() {
+    fun fetchRepositories(forceRefresh: Boolean) {
         liveData.postValue(Resource(ResourceState.LOADING, null, null))
-        return getRepositories.execute(FetchRepositoriesSubscriber())
+        return getRepositories.execute(FetchRepositoriesSubscriber(), forceRefresh)
     }
 
     inner class FetchRepositoriesSubscriber : DisposableSubscriber<List<RepositoryDomainModel>>() {

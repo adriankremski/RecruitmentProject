@@ -88,18 +88,15 @@ dependencies {
     implementation mobileUiDependencies.appCompatV7
     implementation mobileUiDependencies.supportRecyclerView
     implementation mobileUiDependencies.supportDesign
-    implementation mobileUiDependencies.timber
     implementation mobileUiDependencies.rxAndroid
     implementation mobileUiDependencies.glide
+    implementation mobileUiDependencies.glideTransformations
     implementation mobileUiDependencies.dagger
     implementation mobileUiDependencies.daggerSupport
     implementation mobileUiDependencies.butterKnife
     kapt mobileUiDependencies.butterKnifeCompiler
-    implementation mobileUiDependencies.navigationFragment
-    implementation mobileUiDependencies.navigationUI
     implementation mobileUiDependencies.cardView
     implementation mobileUiDependencies.adapterDelegates
-    implementation mobileUiDependencies.jodaTime
     implementation presentationDependencies.archRuntime
     implementation presentationDependencies.archExtensions
     implementation 'android.arch.persistence.room:rxjava2:1.1.1-rc1'

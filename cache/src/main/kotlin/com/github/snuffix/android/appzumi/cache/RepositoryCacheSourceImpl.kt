@@ -7,11 +7,15 @@ import com.github.snuffix.android.appzumi.data.repository.RepositoryCacheSource
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class RepositoryCacheSourceImpl @Inject constructor(private val repositoryDatabase: RepositoryDatabase,
-                                                    private val mapper: CachedRepositoryMapper) :
+                                                    private val mapper: CachedRepositoryMapper,
+                                                    private val cachePreferences: CachePreferences) :
         RepositoryCacheSource {
+
+    private val EXPIRATION_TIME_IN_MILLIS = TimeUnit.DAYS.toMillis(1)
 
     override fun clearRepositories(): Completable {
         return Completable.defer {
@@ -49,5 +53,19 @@ class RepositoryCacheSourceImpl @Inject constructor(private val repositoryDataba
         return Single.defer {
             Single.just(repositoryDatabase.repositoriesDao().getRepositories().isNotEmpty())
         }
+    }
+
+    override fun setLastCacheTime(lastCache: Long) {
+        cachePreferences.lastCacheTime = lastCache
+    }
+
+    override fun isExpired(): Boolean {
+        val currentTime = System.currentTimeMillis()
+        val lastUpdateTime = this.getLastCacheUpdateTimeMillis()
+        return currentTime - lastUpdateTime > EXPIRATION_TIME_IN_MILLIS
+    }
+
+    private fun getLastCacheUpdateTimeMillis(): Long {
+        return cachePreferences.lastCacheTime
     }
 }

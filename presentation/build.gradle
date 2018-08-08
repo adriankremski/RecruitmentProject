@@ -59,11 +59,9 @@ kapt {
 dependencies {
     def presentationDependencies = rootProject.ext.presentationDependencies
 
-    compile presentationDependencies.javaxAnnotation
-
     compile presentationDependencies.kotlin
     compile presentationDependencies.javaxInject
-    compile presentationDependencies.jodaTime
+    compile presentationDependencies.javaxAnnotation
     compile presentationDependencies.rxKotlin
     compile presentationDependencies.archRuntime
     compile presentationDependencies.archExtensions

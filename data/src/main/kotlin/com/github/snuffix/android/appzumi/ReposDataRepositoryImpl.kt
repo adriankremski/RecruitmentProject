@@ -13,21 +13,32 @@ class ReposDataRepositoryImpl @Inject constructor(
         private val repositoryRemoteSource: RepositoryRemoteSource,
         private val repositoryMapper: RepositoryMapper) : ReposDataRepository {
 
-    override fun getRepositories(): Flowable<List<RepositoryDomainModel>> = repositoryCacheSource
-            .isCached()
-            .flatMapPublisher { isCached ->
-                if (isCached) {
-                    repositoryCacheSource
-                            .getRepositories()
-                            .map { it.map { repositoryMapper.mapFromEntity(it) } }
-                } else {
-                    repositoryRemoteSource.getRepositories()
-                            .flatMap {
-                                repositoryCacheSource.saveRepositories(it).toSingle { it }.toFlowable()
-                            }
-                            .flatMap {
-                                Flowable.just(it.map { repositoryMapper.mapFromEntity(it) })
-                            }
-                }
+    override fun getRepositories(forceRefresh: Boolean): Flowable<List<RepositoryDomainModel>> {
+        return if (forceRefresh) {
+            getRepositoriesFromRemote()
+        } else {
+            repositoryCacheSource
+                    .isCached()
+                    .flatMapPublisher { isCached ->
+                        if (isCached && !repositoryCacheSource.isExpired()) {
+                            repositoryCacheSource
+                                    .getRepositories()
+                                    .map { it.map { repositoryMapper.mapFromEntity(it) } }
+                        } else {
+                            getRepositoriesFromRemote()
+                        }
+                    }
+        }
+    }
+
+    private fun getRepositoriesFromRemote(): Flowable<List<RepositoryDomainModel>> = repositoryRemoteSource.getRepositories()
+            .flatMap {
+                repositoryCacheSource.saveRepositories(it)
+                        .toSingle { it }
+                        .toFlowable()
+                        .doOnComplete { repositoryCacheSource.setLastCacheTime(System.currentTimeMillis()) }
+            }
+            .flatMap {
+                Flowable.just(it.map { repositoryMapper.mapFromEntity(it) })
             }
 }

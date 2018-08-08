@@ -1,4 +1,4 @@
-package com.github.snuffix.android.appzumi.ui.main.dagger
+package com.github.snuffix.android.appzumi.ui.repositorylist.dagger
 
 import com.github.snuffix.android.appzumi.domain.usecase.repository.GetRepositories
 import com.github.snuffix.android.appzumi.presentation.mapper.RepositoryMapper
@@ -8,7 +8,7 @@ import dagger.Provides
 
 
 @Module
-open class MainScreenModule {
+open class RepositoryListScreenModule {
 
     @Provides
     fun modelFactory(getRepositories: GetRepositories, repositoryMapper: RepositoryMapper):

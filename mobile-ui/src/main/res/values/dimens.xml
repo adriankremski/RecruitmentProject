@@ -16,5 +16,6 @@
     <dimen name="spacing_baseline">8dp</dimen>
     <dimen name="spacing_baseline_half">4dp</dimen>
     <dimen name="cardview_radius">2dp</dimen>
+    <dimen name="app_bar_height">180dp</dimen>
 
 </resources>

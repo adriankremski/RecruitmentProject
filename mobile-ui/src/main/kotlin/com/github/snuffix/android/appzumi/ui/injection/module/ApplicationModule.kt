@@ -4,6 +4,7 @@ import android.app.Application
 import android.arch.persistence.room.Room
 import android.content.Context
 import com.github.snuffix.android.appzumi.ReposDataRepositoryImpl
+import com.github.snuffix.android.appzumi.cache.CachePreferences
 import com.github.snuffix.android.appzumi.cache.RepositoryCacheSourceImpl
 import com.github.snuffix.android.appzumi.cache.database.RepositoryDatabase
 import com.github.snuffix.android.appzumi.cache.mapper.CachedRepositoryMapper
@@ -65,9 +66,16 @@ open class ApplicationModule {
 
     @Provides
     @PerApplication
+    internal fun provideCachePreferences(context: Context): CachePreferences {
+        return CachePreferences(context)
+    }
+
+    @Provides
+    @PerApplication
     internal fun repositoryCacheSource(database: RepositoryDatabase,
-                                       mapper: CachedRepositoryMapper): RepositoryCacheSource {
-        return RepositoryCacheSourceImpl(database, mapper)
+                                       mapper: CachedRepositoryMapper,
+                                       cachePreferences: CachePreferences): RepositoryCacheSource {
+        return RepositoryCacheSourceImpl(database, mapper, cachePreferences)
     }
 
     @Provides
