@@ -1,7 +1,7 @@
-package com.github.snuffix.android.appzumi.ui.repositorylist.dagger
+package com.github.snuffix.android.appzumi.ui.repository.list.dagger
 
 import com.github.snuffix.android.appzumi.ui.injection.scopes.PerActivity
-import com.github.snuffix.android.appzumi.ui.repositorylist.RepositoryListScreen
+import com.github.snuffix.android.appzumi.ui.repository.list.RepositoryListScreen
 import dagger.Subcomponent
 
 

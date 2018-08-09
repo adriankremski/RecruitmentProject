@@ -36,9 +36,9 @@ class RepositoryCacheSourceImpl @Inject constructor(private val repositoryDataba
         }
     }
 
-    override fun getRepository(repositoryId: String): Flowable<RepositoryEntity> {
-        return Flowable.defer {
-            Flowable.just(repositoryDatabase.repositoriesDao().getRepository(repositoryId))
+    override fun getRepository(repositoryId: String): Single<RepositoryEntity> {
+        return Single.defer {
+            Single.just(repositoryDatabase.repositoriesDao().getRepository(repositoryId))
         }.map {
             mapper.mapFromCached(it)
         }

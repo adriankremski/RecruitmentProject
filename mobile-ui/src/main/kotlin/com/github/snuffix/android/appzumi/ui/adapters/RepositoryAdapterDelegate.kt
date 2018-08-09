@@ -13,6 +13,7 @@ import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions.bitmapTransform
 import com.github.snuffix.android.appzumi.presentation.model.Repository
 import com.github.snuffix.android.appzumi.ui.R
+import com.github.snuffix.android.appzumi.ui.repository.details.repositoryDetailsIntent
 import com.hannesdorfmann.adapterdelegates3.AdapterDelegate
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 
@@ -79,6 +80,11 @@ class RepositoryAdapterDelegate(private val requestManager: RequestManager) : Ad
 
         init {
             ButterKnife.bind(this, itemView)
+
+            itemView.setOnClickListener {
+                var context = itemView.context
+                context.startActivity(context.repositoryDetailsIntent(repositoryId = repository!!.id))
+            }
         }
     }
 }

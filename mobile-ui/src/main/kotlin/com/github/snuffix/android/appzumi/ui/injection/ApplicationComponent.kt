@@ -3,8 +3,10 @@ package com.github.snuffix.android.appzumi.ui.injection
 import android.app.Application
 import com.github.snuffix.android.appzumi.ui.injection.module.ApplicationModule
 import com.github.snuffix.android.appzumi.ui.injection.scopes.PerApplication
-import com.github.snuffix.android.appzumi.ui.repositorylist.dagger.RepositoryListScreenComponent
-import com.github.snuffix.android.appzumi.ui.repositorylist.dagger.RepositoryListScreenModule
+import com.github.snuffix.android.appzumi.ui.repository.list.dagger.RepositoryDetailsScreenComponent
+import com.github.snuffix.android.appzumi.ui.repository.list.dagger.RepositoryDetailsScreenModule
+import com.github.snuffix.android.appzumi.ui.repository.list.dagger.RepositoryListScreenComponent
+import com.github.snuffix.android.appzumi.ui.repository.list.dagger.RepositoryListScreenModule
 import dagger.BindsInstance
 import dagger.Component
 
@@ -20,4 +22,5 @@ interface ApplicationComponent {
     }
 
     fun plusComponent(repositoryListScreenModule: RepositoryListScreenModule): RepositoryListScreenComponent
+    fun plusComponent(repositoryDetailsScreenModule: RepositoryDetailsScreenModule): RepositoryDetailsScreenComponent
 }

@@ -1,4 +1,4 @@
-package com.github.snuffix.android.appzumi.ui.repositorylist
+package com.github.snuffix.android.appzumi.ui.repository.list
 
 import android.arch.lifecycle.Observer
 import android.os.Bundle
@@ -22,7 +22,7 @@ import com.github.snuffix.android.appzumi.ui.TheApplication
 import com.github.snuffix.android.appzumi.ui.adapters.RepositoriesAdapter
 import com.github.snuffix.android.appzumi.ui.adapters.decoration.VerticalSpaceItemDecoration
 import com.github.snuffix.android.appzumi.ui.extension.viewModel
-import com.github.snuffix.android.appzumi.ui.repositorylist.dagger.RepositoryListScreenModule
+import com.github.snuffix.android.appzumi.ui.repository.list.dagger.RepositoryListScreenModule
 import javax.inject.Inject
 
 class RepositoryListScreen : AppCompatActivity() {

@@ -6,12 +6,19 @@ import com.github.snuffix.android.appzumi.data.repository.RepositoryRemoteSource
 import com.github.snuffix.android.appzumi.domain.model.RepositoryDomainModel
 import com.github.snuffix.android.appzumi.domain.repository.ReposDataRepository
 import io.reactivex.Flowable
+import io.reactivex.Single
 import javax.inject.Inject
 
 class ReposDataRepositoryImpl @Inject constructor(
         private val repositoryCacheSource: RepositoryCacheSource,
         private val repositoryRemoteSource: RepositoryRemoteSource,
         private val repositoryMapper: RepositoryMapper) : ReposDataRepository {
+
+    override fun getRepositoryById(repositoryId: String): Single<RepositoryDomainModel> {
+        return repositoryCacheSource
+                .getRepository(repositoryId)
+                .flatMap { Single.just(repositoryMapper.mapFromEntity(it)) }
+    }
 
     override fun getRepositories(forceRefresh: Boolean): Flowable<List<RepositoryDomainModel>> {
         return if (forceRefresh) {
