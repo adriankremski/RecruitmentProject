@@ -8,7 +8,6 @@ import io.reactivex.Single
 interface RepositoryCacheSource {
     fun getRepositories(): Flowable<List<RepositoryEntity>>
     fun saveRepositories(repositories: List<RepositoryEntity>): Completable
-    fun clearRepositories(): Completable
     fun getRepository(repositoryId: String): Flowable<RepositoryEntity>
     fun isCached(): Single<Boolean>
     fun isExpired(): Boolean

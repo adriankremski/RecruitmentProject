@@ -17,15 +17,10 @@ class RepositoryCacheSourceImpl @Inject constructor(private val repositoryDataba
 
     private val EXPIRATION_TIME_IN_MILLIS = TimeUnit.DAYS.toMillis(1)
 
-    override fun clearRepositories(): Completable {
-        return Completable.defer {
-            repositoryDatabase.repositoriesDao().deleteRepositories()
-            Completable.complete()
-        }
-    }
-
     override fun saveRepositories(repositories: List<RepositoryEntity>): Completable {
         return Completable.defer {
+            repositoryDatabase.repositoriesDao().deleteRepositories()
+
             repositories.forEach {
                 repositoryDatabase.repositoriesDao().insertRepository(mapper.mapToCached(it))
             }
