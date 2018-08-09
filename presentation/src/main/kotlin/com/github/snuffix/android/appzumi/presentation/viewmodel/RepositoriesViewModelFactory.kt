@@ -2,7 +2,7 @@ package com.github.snuffix.android.appzumi.presentation.viewmodel
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import com.github.snuffix.android.appzumi.domain.usecase.repository.GetRepositories
+import com.github.snuffix.android.appzumi.domain.usecase.GetRepositories
 import com.github.snuffix.android.appzumi.presentation.mapper.RepositoryMapper
 
 open class RepositoriesViewModelFactory(

@@ -4,9 +4,8 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.github.snuffix.android.appzumi.domain.model.RepositoryDomainModel
-import com.github.snuffix.android.appzumi.domain.usecase.repository.GetRepositories
+import com.github.snuffix.android.appzumi.domain.usecase.GetRepositories
 import com.github.snuffix.android.appzumi.presentation.data.Resource
-import com.github.snuffix.android.appzumi.presentation.data.ResourceState
 import com.github.snuffix.android.appzumi.presentation.mapper.RepositoryMapper
 import com.github.snuffix.android.appzumi.presentation.model.Repository
 import io.reactivex.subscribers.DisposableSubscriber
@@ -26,7 +25,7 @@ open class GetRepositoriesViewModel @Inject internal constructor(
     fun repositories(): LiveData<Resource<List<Repository>>> = liveData
 
     fun fetchRepositories(forceRefresh: Boolean) {
-        liveData.postValue(Resource(ResourceState.LOADING, null, null))
+        liveData.postValue(Resource.loading())
         return getRepositories.execute(FetchRepositoriesSubscriber(), forceRefresh)
     }
 
@@ -35,12 +34,11 @@ open class GetRepositoriesViewModel @Inject internal constructor(
         override fun onComplete() {}
 
         override fun onNext(repositories: List<RepositoryDomainModel>) {
-            liveData.postValue(Resource(ResourceState.SUCCESS,
-                    repositories.map { repositoryMapper.mapToModel(it) }, null))
+            liveData.postValue(Resource.success(repositories.map { repositoryMapper.mapToModel(it) }))
         }
 
         override fun onError(exception: Throwable) {
-            liveData.postValue(Resource(ResourceState.ERROR, null, exception.message))
+            liveData.postValue(Resource.networkError())
         }
     }
 }

@@ -1,16 +1,22 @@
 package com.github.snuffix.android.appzumi.presentation.data
 
-open class Resource<out T> constructor(val status: ResourceState, val data: T?, val message: String?) {
+open class Resource<out T> private constructor(val status: ResourceState, val data: T?, val message: String?) {
 
-    fun <T> success(data: T): Resource<T> {
-        return Resource(ResourceState.SUCCESS, data, null)
-    }
+    companion object {
+        fun <T> success(data: T): Resource<T> {
+            return Resource(ResourceState.SUCCESS, data, null)
+        }
 
-    fun <T> error(message: String, data: T?): Resource<T> {
-        return Resource(ResourceState.ERROR, null, message)
-    }
+        fun <T> error(message: String?): Resource<T> {
+            return Resource(ResourceState.ERROR, null, message)
+        }
 
-    fun <T> loading(): Resource<T> {
-        return Resource(ResourceState.LOADING, null, null)
+        fun <T> networkError(): Resource<T> {
+            return Resource(ResourceState.NETWORK_ERROR, null, "")
+        }
+
+        fun <T> loading(): Resource<T> {
+            return Resource(ResourceState.LOADING, null, null)
+        }
     }
 }

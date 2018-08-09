@@ -36,6 +36,9 @@ class RepositoryListScreen : AppCompatActivity() {
     @BindView(R.id.repositories_refresh)
     lateinit var repositoriesRefresh: SwipeRefreshLayout
 
+    @BindView(R.id.error_screen)
+    lateinit var errorScreenView: View
+
     @Inject
     lateinit var repositoriesViewModelFactory: RepositoriesViewModelFactory
 
@@ -48,8 +51,10 @@ class RepositoryListScreen : AppCompatActivity() {
         setContentView(R.layout.activity_repository_list)
         ButterKnife.bind(this)
 
-        toolbar.title = getString(R.string.screen_title_repository_list)
         setSupportActionBar(toolbar)
+        supportActionBar!!.setDisplayShowTitleEnabled(true);
+        toolbar.title = getString(R.string.screen_title_repository_list)
+        title = getString(R.string.screen_title_repository_list)
 
         repositoriesRecycler.layoutManager = LinearLayoutManager(this)
         adapter = RepositoriesAdapter(emptyList(), Glide.with(this))
@@ -59,6 +64,7 @@ class RepositoryListScreen : AppCompatActivity() {
         getRepositoriesViewModel = viewModel(repositoriesViewModelFactory, GetRepositoriesViewModel::class.java)
 
         repositoriesRefresh.setOnRefreshListener { fetchRepositories(true) }
+        errorScreenView.setOnClickListener { fetchRepositories(true) }
 
         getRepositoriesViewModel.repositories().observe(this,
                 Observer<Resource<List<Repository>>> { resource ->
@@ -82,6 +88,9 @@ class RepositoryListScreen : AppCompatActivity() {
             ResourceState.ERROR -> {
                 showError()
             }
+            ResourceState.NETWORK_ERROR -> {
+                showNetworkError()
+            }
             ResourceState.LOADING -> {
                 showLoading()
             }
@@ -91,11 +100,14 @@ class RepositoryListScreen : AppCompatActivity() {
     private fun showLoading() {
         repositoriesRefresh.isEnabled = true
         repositoriesRefresh.isRefreshing = true
+        repositoriesRefresh.visibility = View.VISIBLE
+        errorScreenView.visibility = View.GONE
     }
 
     private fun showRepositories(repositories: List<Repository>) {
         repositoriesRefresh.isRefreshing = false
         repositoriesRecycler.visibility = View.VISIBLE
+        errorScreenView.visibility = View.GONE
 
         if (repositoriesRecycler.layoutAnimation == null) {
             var controller = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation_fall_down);
@@ -110,6 +122,12 @@ class RepositoryListScreen : AppCompatActivity() {
     private fun showError() {
         repositoriesRefresh.isEnabled = false
         repositoriesRefresh.isRefreshing = false
+        repositoriesRefresh.visibility = View.GONE
         repositoriesRecycler.visibility = View.GONE
+        errorScreenView.visibility = View.VISIBLE
+    }
+
+    private fun showNetworkError() {
+        showError()
     }
 }

@@ -94,6 +94,7 @@ dependencies {
     implementation mobileUiDependencies.dagger
     implementation mobileUiDependencies.daggerSupport
     implementation mobileUiDependencies.butterKnife
+    implementation mobileUiDependencies.constraintLayout
     kapt mobileUiDependencies.butterKnifeCompiler
     implementation mobileUiDependencies.cardView
     implementation mobileUiDependencies.adapterDelegates

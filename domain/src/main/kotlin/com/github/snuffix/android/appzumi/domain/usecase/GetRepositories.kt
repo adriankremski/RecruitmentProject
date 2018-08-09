@@ -1,4 +1,4 @@
-package com.github.snuffix.android.appzumi.domain.usecase.repository
+package com.github.snuffix.android.appzumi.domain.usecase
 
 import com.github.snuffix.android.appzumi.domain.executor.PostExecutionThread
 import com.github.snuffix.android.appzumi.domain.model.RepositoryDomainModel
