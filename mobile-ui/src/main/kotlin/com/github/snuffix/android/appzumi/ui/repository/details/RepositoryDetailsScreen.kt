@@ -31,7 +31,6 @@ import com.github.snuffix.android.appzumi.ui.repository.list.dagger.RepositoryDe
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import javax.inject.Inject
 
-
 private const val REPOSITORY_ID_KEY: String = "REPOSITORY_ID_KEY"
 
 fun Context.repositoryDetailsIntent(repositoryId: String): Intent {
@@ -96,7 +95,7 @@ class RepositoryDetailsScreen : AppCompatActivity() {
         when (resource.status) {
             ResourceState.SUCCESS -> {
                 resource?.data?.let {
-                    usernameLabel.text = it.userName
+                    usernameLabel.text = "by ${it.userName}"
                     repositoryNameLabel.text = it.repositoryName
                     repositoryDescriptionLabel.text = it.description
                     repositoryIconImageView.setRepository(it)

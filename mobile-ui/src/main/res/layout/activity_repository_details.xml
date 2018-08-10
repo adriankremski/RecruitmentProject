@@ -48,7 +48,7 @@
         app:layout_constraintTop_toBottomOf="@+id/app_bar_layout">
 
         <TextView
-            android:id="@+id/username"
+            android:id="@+id/repository_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
@@ -56,10 +56,10 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textColor="#DE000000"
             android:textSize="24sp"
-            tools:text="Adrian Kremski" />
+            tools:text="Repository name" />
 
         <TextView
-            android:id="@+id/repository_name"
+            android:id="@+id/username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
@@ -68,7 +68,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:textColor="#99000000"
             android:textSize="20sp"
-            tools:text="Repository name" />
+            tools:text="Adrian Kremski" />
 
     </LinearLayout>
 

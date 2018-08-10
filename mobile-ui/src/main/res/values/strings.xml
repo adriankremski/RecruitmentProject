@@ -3,4 +3,5 @@
     <string name="screen_title_repository_list">Repository list</string>
     <string name="error_screen_text">Oops! Something went wrong. \nPlease tap to retry</string>
     <string name="screen_title_repository_details">Repository details</string>
+    <string name="menu_option_sort_by_repository_name">Sort by repo name</string>
 </resources>

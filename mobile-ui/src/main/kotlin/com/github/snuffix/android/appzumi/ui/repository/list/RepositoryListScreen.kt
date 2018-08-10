@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.animation.AnimationUtils
 import butterknife.BindView
@@ -21,6 +23,7 @@ import com.github.snuffix.android.appzumi.ui.R
 import com.github.snuffix.android.appzumi.ui.TheApplication
 import com.github.snuffix.android.appzumi.ui.adapters.RepositoriesAdapter
 import com.github.snuffix.android.appzumi.ui.adapters.decoration.VerticalSpaceItemDecoration
+import com.github.snuffix.android.appzumi.ui.extension.sortedByName
 import com.github.snuffix.android.appzumi.ui.extension.viewModel
 import com.github.snuffix.android.appzumi.ui.repository.list.dagger.RepositoryListScreenModule
 import javax.inject.Inject
@@ -45,6 +48,11 @@ class RepositoryListScreen : AppCompatActivity() {
     private lateinit var getRepositoriesViewModel: GetRepositoriesViewModel
     private lateinit var adapter: RepositoriesAdapter
 
+    private val allRepositories = mutableListOf<Repository>()
+    private var sortOptionEnabled = false
+
+    private val BUNDLE_KEY_SORT_OPTION_ENABLED = "BUNDLE_KEY_SORT_OPTION_ENABLED"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         TheApplication[this].appComponent.plusComponent(RepositoryListScreenModule()).inject(this)
@@ -53,6 +61,10 @@ class RepositoryListScreen : AppCompatActivity() {
 
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(true);
+
+        savedInstanceState?.let {
+            sortOptionEnabled = it.getBoolean(BUNDLE_KEY_SORT_OPTION_ENABLED)
+        }
 
         repositoriesRecycler.layoutManager = LinearLayoutManager(this)
         adapter = RepositoriesAdapter(emptyList(), Glide.with(this))
@@ -103,6 +115,9 @@ class RepositoryListScreen : AppCompatActivity() {
     }
 
     private fun showRepositories(repositories: List<Repository>) {
+        allRepositories.clear()
+        allRepositories.addAll(repositories)
+
         repositoriesRefresh.isRefreshing = false
         repositoriesRecycler.visibility = View.VISIBLE
         errorScreenView.visibility = View.GONE
@@ -112,7 +127,12 @@ class RepositoryListScreen : AppCompatActivity() {
             repositoriesRecycler.layoutAnimation = controller;
         }
 
-        adapter.items = repositories
+        adapter.items = if (sortOptionEnabled) {
+            allRepositories.sortedByName()
+        } else {
+            allRepositories
+        }
+
         adapter.notifyDataSetChanged()
         repositoriesRecycler.scheduleLayoutAnimation();
     }
@@ -127,5 +147,39 @@ class RepositoryListScreen : AppCompatActivity() {
 
     private fun showNetworkError() {
         showError()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.repository_list_menu, menu)
+        return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        menu?.findItem(R.id.menu_option_sort_by_repository_name)?.setChecked(sortOptionEnabled)
+        return super.onPrepareOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        item?.let {
+            if (item.itemId == R.id.menu_option_sort_by_repository_name) {
+                item.isChecked = !item.isChecked;
+
+                sortOptionEnabled = it.isChecked
+
+                adapter.items = if (sortOptionEnabled) {
+                    allRepositories.sortedByName()
+                } else {
+                    allRepositories
+                }
+
+                adapter.notifyDataSetChanged()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState?.putBoolean(BUNDLE_KEY_SORT_OPTION_ENABLED, sortOptionEnabled)
     }
 }

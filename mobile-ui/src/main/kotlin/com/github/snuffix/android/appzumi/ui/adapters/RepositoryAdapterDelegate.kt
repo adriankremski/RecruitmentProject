@@ -66,7 +66,7 @@ class RepositoryAdapterDelegate(private val requestManager: RequestManager) : Ad
                 field = value
 
                 field?.let {
-                    usernameLabel.text = it.userName
+                    usernameLabel.text = "by ${it.userName}"
                     repositoryNameLabel.text = it.repositoryName
                     ViewCompat.setTransitionName(userAvatarImageView, it.id);
                     repositoryIconImageView.setRepository(it)
