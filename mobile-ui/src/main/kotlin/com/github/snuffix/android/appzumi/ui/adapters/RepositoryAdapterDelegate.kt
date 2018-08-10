@@ -1,6 +1,9 @@
 package com.github.snuffix.android.appzumi.ui.adapters
 
+import android.app.Activity
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.content.ContextCompat
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -13,9 +16,11 @@ import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions.bitmapTransform
 import com.github.snuffix.android.appzumi.presentation.model.Repository
 import com.github.snuffix.android.appzumi.ui.R
+import com.github.snuffix.android.appzumi.ui.RepositoryIconImageView
 import com.github.snuffix.android.appzumi.ui.repository.details.repositoryDetailsIntent
 import com.hannesdorfmann.adapterdelegates3.AdapterDelegate
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
+
 
 class RepositoryAdapterDelegate(private val requestManager: RequestManager) : AdapterDelegate<List<Repository>>() {
 
@@ -54,27 +59,17 @@ class RepositoryAdapterDelegate(private val requestManager: RequestManager) : Ad
         lateinit var repositoryNameLabel: TextView
 
         @BindView(R.id.repository_icon)
-        lateinit var repositoryImageView: ImageView
+        lateinit var repositoryIconImageView: RepositoryIconImageView
 
         var repository: Repository? = null
             set(value) {
                 field = value
-                usernameLabel.text = field?.userName
-                repositoryNameLabel.text = field?.repositoryName
 
-                var repositoryIconResource = when (field?.source) {
-                    "github" -> R.drawable.ic_github
-                    "bitbucket" -> R.drawable.ic_bitbucket
-                    else -> {
-                        null
-                    }
-                }
-
-                if (repositoryIconResource != null) {
-                    repositoryImageView.visibility = View.VISIBLE
-                    repositoryImageView.setImageResource(repositoryIconResource)
-                } else {
-                    repositoryImageView.visibility = View.GONE
+                field?.let {
+                    usernameLabel.text = it.userName
+                    repositoryNameLabel.text = it.repositoryName
+                    ViewCompat.setTransitionName(userAvatarImageView, it.id);
+                    repositoryIconImageView.setRepository(it)
                 }
             }
 
@@ -82,8 +77,14 @@ class RepositoryAdapterDelegate(private val requestManager: RequestManager) : Ad
             ButterKnife.bind(this, itemView)
 
             itemView.setOnClickListener {
+
+                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        itemView.context as Activity,
+                        userAvatarImageView,
+                        ViewCompat.getTransitionName(userAvatarImageView))
                 var context = itemView.context
-                context.startActivity(context.repositoryDetailsIntent(repositoryId = repository!!.id))
+
+                context.startActivity(context.repositoryDetailsIntent(repositoryId = repository!!.id), options.toBundle())
             }
         }
     }

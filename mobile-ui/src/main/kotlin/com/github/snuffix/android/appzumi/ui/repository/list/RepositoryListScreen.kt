@@ -53,8 +53,6 @@ class RepositoryListScreen : AppCompatActivity() {
 
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(true);
-        toolbar.title = getString(R.string.screen_title_repository_list)
-        title = getString(R.string.screen_title_repository_list)
 
         repositoriesRecycler.layoutManager = LinearLayoutManager(this)
         adapter = RepositoriesAdapter(emptyList(), Glide.with(this))

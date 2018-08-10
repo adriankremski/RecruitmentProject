@@ -57,7 +57,7 @@
 
         </LinearLayout>
 
-        <android.support.v7.widget.AppCompatImageView
+        <com.github.snuffix.android.appzumi.ui.RepositoryIconImageView
             android:id="@+id/repository_icon"
             android:layout_width="32dp"
             android:layout_height="32dp"
@@ -66,8 +66,7 @@
             android:layout_marginTop="12dp"
             android:layout_marginEnd="12dp"
             android:padding="4dp"
-            android:scaleType="centerCrop"
-            app:srcCompat="@drawable/ic_bitbucket" />
+            android:scaleType="centerCrop"/>
 
     </RelativeLayout>
 

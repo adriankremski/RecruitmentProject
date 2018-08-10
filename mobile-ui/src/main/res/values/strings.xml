@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Appzumi Demo Project</string>
-    <string name="screen_title_repository_list">Repositories</string>
+    <string name="screen_title_repository_list">Repository list</string>
     <string name="error_screen_text">Oops! Something went wrong. \nPlease tap to retry</string>
+    <string name="screen_title_repository_details">Repository details</string>
 </resources>
